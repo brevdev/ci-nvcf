@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Display environment variables
-        run: env | grep -e 'ARGS' -e 'FN_'
+        run: env | grep -e 'ARGS' -e 'FN_' || true
 
       - name: Deploy function
         run: |
