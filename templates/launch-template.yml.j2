@@ -1,0 +1,38 @@
+name: {{ fn_name }}
+function_alias: {{ fn_name }}
+functions:
+  - &default_function
+    type: production
+    ngc_org: {{ fn_ngc_org }}
+    ngc_team: {{ fn_ngc_team }}
+    inferenceUrl: /v1/chat/completions
+    inferencePort: 80
+    healthUri: /health
+    containerImage: {{ fn_image }}
+    containerArgs: |
+      {{ containerArgs }}
+    containerEnvironment:
+      - key: HUGGING_FACE_HUB_TOKEN
+        value: "{{ fn_hugging_face_hub_token }}"
+      {% for i in env -%}
+      - key: {{ i.key }}
+        value: {{ i.value }}
+      {% endfor %}
+    models:
+      - name: {{ fn_ngc_model }}
+        version: {{ fn_ngc_model_version }}
+        uri: {{ fn_ngc_model }}
+      {% for i in models -%}
+      - name: {{ i.key }}
+        version: {{ i.value }}
+        uri: {{ i.uri }}
+      {% endfor %}
+    apiBodyFormat: CUSTOM
+    inst_backend: {{  inst_backend }}
+    inst_gpu_type: {{ inst_gpu_type  }}
+    inst_type: {{ inst_type }}
+    inst_min: {{ inst_min }}
+    inst_max: {{ inst_max }}
+    inst_max_request_concurrency: {{ inst_max_request_concurrency }}
+    auto_clean: yes
+    auto_test: no

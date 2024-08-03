@@ -1,0 +1,6 @@
+__py*
+.env
+.venv
+manifest-*
+*.bak
+sample-model/
