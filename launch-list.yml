@@ -5,10 +5,10 @@ fn_image: nvcr.io/sklmhpjhptei/test-team/text-generation-inference:latest
 functions:
   - fn_name: inference-l40sx1
     containerArgs: "--model-id meta-llama/Meta-Llama-3-8B"
-    # models:
-    #   - name: sample-model
-    #     version: 0.1
-    #     uri: sample-model
+    models:
+      - name: sample-model
+        version: 0.1
+        uri: sample-model
     env:
       - key: FN_SAMPLE_ENV_KEY
         value: "FN_SAMPLE_ENV_VALUE"

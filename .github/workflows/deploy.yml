@@ -1,0 +1,25 @@
+name: Deploy Function
+
+on:
+  workflow_dispatch:
+    inputs:
+      function_name:
+        description: 'Function name to deploy'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/liveaverage/ci-builder:latest
+      #options: --user root
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Display environment variables
+        run: env | grep -e 'ARGS' -e 'FN_'
+
+      - name: Deploy function
+        run: |
+          python3 launch-nvcf.py --manifest templates/launch-template.yml.j2 --environment production --function-name ${{ github.event.inputs.function_name }}

@@ -19,12 +19,17 @@ functions:
         value: {{ i.value }}
       {% endfor %}
     models:
-      - name: {{ fn_ngc_model }}
-        version: {{ fn_ngc_model_version }}
-        uri: {{ fn_ngc_model }}
+      ### Specify global model mount:
+      #
+      #- name: {{ fn_ngc_model }}
+      #  version: {{ fn_ngc_model_version }}
+      #  uri: {{ fn_ngc_model }}
+      #
+      ### Specify individual model mount:
+      #
       {% for i in models -%}
-      - name: {{ i.key }}
-        version: {{ i.value }}
+      - name: {{ i.name }}
+        version: {{ i.version }}
         uri: {{ i.uri }}
       {% endfor %}
     apiBodyFormat: CUSTOM
