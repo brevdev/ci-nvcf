@@ -17,9 +17,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Display environment variables
-        run: env | grep -e 'ARGS' -e 'FN_' || true
-
       - name: Deploy function
         run: |
           python3 launch-nvcf.py --manifest templates/launch-template.yml.j2 --environment production --function-name ${{ github.event.inputs.function_name }}
+        env:
+          PRD_NVCF_API_KEY: ${{ secrets.PRD_NVCF_API_KEY }}
+          FN_NGC_ORG: ${{ secrets.FN_NGC_ORG }}
+          FN_NGC_TEAM: ${{ secrets.FN_NGC_TEAM }}
+          FN_HUGGING_FACE_HUB_TOKEN: ${{ secrets.FN_HUGGING_FACE_HUB_TOKEN }}
