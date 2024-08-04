@@ -373,7 +373,7 @@ def main():
     parser = argparse.ArgumentParser(description="Run the NVCF Launcher")
     parser.add_argument("--debug", action="store_true", help="Run in debug mode (skip runner.create())")
     parser.add_argument("--manifest", type=str, help="Path to the YAML manifest file", required=True)
-    parser.add_argument("--function-name", type=str, help="Function name to limit the deployment to")
+    parser.add_argument("--function-name", type=str, help="Function name(s) to limit the deployment to (comma-separated list or '*')")
     parser.add_argument(
         "--environment", type=str, help='Destination for NVCF deployment matching "type"', required=True
     )
@@ -407,10 +407,14 @@ def main():
         fn_env_vars = get_fn_env_vars()
 
         if args.function_name:
-            launch_list['functions'] = [
-                fn for fn in launch_list.get('functions', []) 
-                if fn.get('fn_name') == args.function_name
-            ]
+            function_names = [fn.strip() for fn in args.function_name.split(',')]
+            if '*' in function_names:
+                launch_list['functions'] = launch_list.get('functions', [])
+            else:
+                launch_list['functions'] = [
+                    fn for fn in launch_list.get('functions', []) 
+                    if fn.get('fn_name') in function_names
+                ]
 
         for launch_config in launch_list.get('functions', []):
             # Merge in this order: YAML vars -> function-specific vars -> FN_ env vars
@@ -454,4 +458,3 @@ def process_manifest(runner, manifest_path, debug_mode):
 
 if __name__ == "__main__":
     main()
-
