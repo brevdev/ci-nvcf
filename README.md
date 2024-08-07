@@ -55,3 +55,16 @@ python3 launch-nvcf.py --manifest templates/launch-template.yml.j2 --environment
 ## Notes
 
 - These Github actions reference a prebuilt image with all prereqs installed: quay.io/liveaverage/ci-builder:latest (https://github.com/liveaverage/ci-builder)
+
+### Diagram 
+
+```mermaid
+graph TD
+    A[launch-list.yml] -->|Provides function configurations| B[launch-template.yml.j2]
+    C[Environment Variables FN_*] -->|Provides dynamic values| B
+    B -->|Rendered template| D[launch-nvcf.py]
+    E[GitHub Secrets] -->|Provides sensitive data| D
+    D -->|Deploys functions| F[NGC API NVCF Functions]
+    G[GitHub Actions deploy.yml] -->|Triggers| D
+    H[User Input function_name] -->|Specifies function to deploy| G
+```
