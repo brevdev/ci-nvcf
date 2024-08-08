@@ -1,0 +1,5 @@
+docker pull nvcr.io/sklmhpjhptei/test-team/text-generation-inference:latest
+
+docker tag nvcr.io/sklmhpjhptei/test-team/text-generation-inference:latest nvcr.io/sklmhpjhptei/test-team/test-tgi:v1.0.0
+
+clear

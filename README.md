@@ -19,21 +19,21 @@ This repo provides a starting point for automating NVCF function deployments and
 1. **NGC Setup**:
 
 > Using workflows to automatically push to NGC will differ depending on your current container CI. Take a look at `docs/container-ci-setup.md` for some inspiration.
-  - Push your **Container Image** to the NGC Private Registry (nvcr.io) correlated to your org and/or team.
-  - If necessary, push any referenced **Models** to the NGC Private Registry.
+    - Push your **Container Image** to the NGC Private Registry (nvcr.io) correlated to your org and/or team.
+    - If necessary, push any referenced **Models** to the NGC Private Registry.
 
 2. **Repository Configuration**:
-  - Clone this repository into your Github account
-  - Update `launch-list.yml` with your image tag and function configurations
-  - Adjust the `launch-template.yml.j2` to define baseline function configurations. You'll need to edit this if you plan to use models from NGC.
+    - Clone this repository into your Github account
+    - Update `launch-list.yml` with your image tag and function configurations
+    - Adjust the `launch-template.yml.j2` to define baseline function configurations. You'll need to edit this if you plan to use models from NGC.
 
 3. **GitHub Secrets**:
 Ensure the following secrets are configured in your GitHub repository. Note that any environment variables prefixed with `FN_` will be automatically consumed by Jinja2 templates.:
-  - `PRD_NVCF_API_KEY`: Required to manage your functions and function lifecycles.
-  - `FN_NGC_ORG`: Your NGC organization name.
-  - `FN_NGC_TEAM`: Your NGC team name.
-  - `FN_HUGGING_FACE_HUB_TOKEN`: If using Hugging Face models (optional).
-  - Any additional `FN_*` variables required by your specific setup.
+    - `PRD_NVCF_API_KEY`: Required to manage your functions and function lifecycles.
+    - `FN_NGC_ORG`: Your NGC organization name.
+    - `FN_NGC_TEAM`: Your NGC team name.
+    - `FN_HUGGING_FACE_HUB_TOKEN`: If using Hugging Face models (optional).
+    - Any additional `FN_*` variables required by your specific setup.
 
 ## Workflow Pipeline
 
