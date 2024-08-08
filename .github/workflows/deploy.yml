@@ -6,9 +6,13 @@ on:
       function_name:
         description: 'Function name to deploy'
         required: true
-  push:
-    paths:
-      - 'launch-list.yml'
+  workflow_run:
+    workflows: [Mock NGC Push and Update]
+    types:
+      - completed
+  # push:
+  #   paths:
+  #     - 'launch-list.yml'
 
 jobs:
   deploy:
