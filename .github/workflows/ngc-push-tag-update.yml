@@ -26,7 +26,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python update_launch_list.py ${{ github.event.inputs.new_tag }}
+          python update-launch-list.py ${{ github.event.inputs.new_tag }}
 
       - name: Upload updated launch-list.yml
         uses: actions/upload-artifact@v3
