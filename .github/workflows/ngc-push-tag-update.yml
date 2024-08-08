@@ -1,4 +1,4 @@
-name: Mock NGC Push
+name: Mock NGC Push and Update
 
 on:
   workflow_dispatch:
@@ -15,19 +15,37 @@ jobs:
       options: --user root
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Mock NGC Push
         run: |
           echo "Mocking push to NGC with tag: ${{ github.event.inputs.new_tag }}"
-          # in prod this will require an ngc api key and the cli/or scrip that uses the api
-          echo "nvcr.io/sklmhpjhptei/test-team/test-tgi:${{ github.event.inputs.new_tag }} will be pushed to NGC" 
+          echo "nvcr.io/your_org/your_image:${{ github.event.inputs.new_tag }}" > latest_image.txt
+
       - name: Update launch-list.yml with new image tag 
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python update-launch-list.py ${{ github.event.inputs.new_tag }}
-          
+          python update_launch_list.py ${{ github.event.inputs.new_tag }}
+
+      - name: Upload updated launch-list.yml
+        uses: actions/upload-artifact@v3
+        with:
+          name: updated-launch-list
+          path: launch-list.yml
+
+  commit-and-push:
+    needs: mock-ngc-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download updated launch-list.yml
+        uses: actions/download-artifact@v3
+        with:
+          name: updated-launch-list
+
       - name: Commit and push if changed
         run: |
           git config --global user.email "action@github.com"
