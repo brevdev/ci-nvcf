@@ -1,10 +1,12 @@
 name: Mock NGC Push
+
 on:
   workflow_dispatch:
     inputs:
       new_tag:
         description: 'New tag for the image'
         required: true
+
 jobs:
   mock-ngc-push:
     runs-on: ubuntu-latest
@@ -14,27 +16,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Debug information
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "List of files in current directory:"
-          ls -la
-          echo "Content of root directory:"
-          ls -la /
-          echo "Python version:"
-          python --version
-
       - name: Mock NGC Push
         run: |
           echo "Mocking push to NGC with tag: ${{ github.event.inputs.new_tag }}"
-          echo "nvcr.io/your_org/your_image:${{ github.event.inputs.new_tag }}" > latest_image.txt
-
+          # in prod this will require an ngc api key and the cli/or scrip that uses the api
+          echo "nvcr.io/sklmhpjhptei/test-team/test-tgi:${{ github.event.inputs.new_tag }} will be pushed to NGC" 
       - name: Update launch-list.yml with new image tag 
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Attempting to run update_launch_list.py"
-          python update_launch_list.py ${{ github.event.inputs.new_tag }}
+          python update-launch-list.py ${{ github.event.inputs.new_tag }}
           
       - name: Commit and push if changed
         run: |
