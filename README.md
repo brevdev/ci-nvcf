@@ -17,10 +17,10 @@ This repo provides a starting point for automating NVCF function deployments and
 ## Getting Started
 
 1. **NGC Setup**:
-
-> Using workflows to automatically push to NGC will differ depending on your current container CI. Take a look at `docs/container-ci-setup.md` for some inspiration.
     - Push your **Container Image** to the NGC Private Registry (nvcr.io) correlated to your org and/or team.
     - If necessary, push any referenced **Models** to the NGC Private Registry.
+    - Note: Using workflows to automatically push to NGC will differ depending on your current container CI. Take a look at `docs/container-ci-setup.md` for some inspiration.
+    
 
 2. **Repository Configuration**:
     - Clone this repository into your Github account
@@ -38,7 +38,7 @@ Ensure the following secrets are configured in your GitHub repository. Note that
 ## Workflow Pipeline
 
 #### 1. Mock NGC Push and Update (`ngc-push-tag-update.yml`)
-This workflow mocks the push to NGC and updates the `launch-list.yml` with the new image tag. The NGC push is a WIP and can vary depenidng on your current container CI.
+This workflow mocks the push to NGC and updates the `launch-list.yml` with the new image tag. The NGC push is a WIP and can vary depending on your current container CI.
 
 #### 2. Deploy Function (`deploy.yml`)
 This workflow deploys the function(s) defined in `launch-list.yml` to NGC using the `launch-nvcf.py` script. This script is a wrapper around the NGC API that handles the creation and management of NVCF functions.  
