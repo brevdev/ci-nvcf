@@ -1,36 +1,32 @@
-# Function Base Image (replica of the text-generation-inference)
-fn_image: nvcr.io/sklmhpjhptei/test-team/test-tgi:v1.0.0
-
-# Function Launch List:
+fn_image: nvcr.io/sklmhpjhptei/test-team/test-tgi:v1.0.1
 functions:
-  - fn_name: inference-l40sx1
-    containerArgs: "--model-id meta-llama/Meta-Llama-3-8B"
-    models:
-      - name: sample-model
-        version: 0.1
-        uri: sample-model
-    env:
-      - key: FN_SAMPLE_ENV_KEY
-        value: "FN_SAMPLE_ENV_VALUE"
-    inst_backend: GFN
-    inst_gpu_type: L40S
-    inst_type: gl40s_1.br25_2xlarge
-    inst_min: 1
-    inst_max: 1
-    inst_max_request_concurrency: 1
-
-  - fn_name: inference-l40sx1-v2
-    containerArgs: "--model-id meta-llama/Meta-Llama-3-8B"
-    models:
-      - name: sample-model
-        version: 0.1
-        uri: sample-model
-    env:
-      - key: FN_SAMPLE_ENV_KEY
-        value: "FN_SAMPLE_ENV_VALUE"
-    inst_backend: GFN
-    inst_gpu_type: L40S
-    inst_type: gl40s_1.br25_2xlarge
-    inst_min: 1
-    inst_max: 1
-    inst_max_request_concurrency: 1
+- containerArgs: --model-id meta-llama/Meta-Llama-3-8B
+  env:
+  - key: FN_SAMPLE_ENV_KEY
+    value: FN_SAMPLE_ENV_VALUE
+  fn_name: inference-l40sx1
+  inst_backend: GFN
+  inst_gpu_type: L40S
+  inst_max: 1
+  inst_max_request_concurrency: 1
+  inst_min: 1
+  inst_type: gl40s_1.br25_2xlarge
+  models:
+  - name: sample-model
+    uri: sample-model
+    version: 0.1
+- containerArgs: --model-id meta-llama/Meta-Llama-3-8B
+  env:
+  - key: FN_SAMPLE_ENV_KEY
+    value: FN_SAMPLE_ENV_VALUE
+  fn_name: inference-l40sx1-v2
+  inst_backend: GFN
+  inst_gpu_type: L40S
+  inst_max: 1
+  inst_max_request_concurrency: 1
+  inst_min: 1
+  inst_type: gl40s_1.br25_2xlarge
+  models:
+  - name: sample-model
+    uri: sample-model
+    version: 0.1
