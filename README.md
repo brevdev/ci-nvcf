@@ -9,16 +9,19 @@ This repo is designed to be modular. You can simply clone this repo and start mo
 ## Getting Started
 
 1. **GitHub Secrets**:
-   Ensure the following secrets are configured in your GitHub repository. Note that any environment variables prefixed with `FN_` will be automatically consumed by the Jinja2 template: - `PRD_NVCF_API_KEY`: Required to manage your functions and function lifecycles. - `FN_NGC_ORG`: Your NGC organization name. - `FN_NGC_TEAM`: Your NGC team name. - `FN_HUGGING_FACE_HUB_TOKEN`: If using Hugging Face models (optional). - Any additional `FN_*` variables required by your specific setup.
+   Ensure the following secrets are configured in your GitHub repository. Note that any environment variables prefixed with `FN_` will be automatically consumed by the Jinja2 template:
+   - `PRD_NVCF_API_KEY`: Required to manage your functions and function lifecycles.
+   - `FN_NGC_ORG`: Your NGC organization name.
+   - `FN_NGC_TEAM`: Your NGC team name.
+   - `FN_HUGGING_FACE_HUB_TOKEN`: If using Hugging Face models (optional).
+   - Any additional `FN_*` variables required by your specific setup.
 
 2. **NGC Setup**:
-
    - Push your **Container Image** to the NGC Private Registry (nvcr.io) correlated to your org and/or team.
    - If necessary, push any referenced **Models** to the NGC Private Registry.
    - Note: Using workflows to automatically push to NGC will differ depending on your current container CI. Take a look at `docs/container-ci-setup.md` for some inspiration.
 
 3. **Repository Configuration**:
-
    - Clone this repository into your Github account
    - Update `launch-list.yml` with your image tag and function configurations
    - Adjust the `launch-template.yml.j2` to define baseline function configurations. You'll need to edit this if you plan to use models from NGC.
@@ -30,9 +33,8 @@ This repo is designed to be modular. You can simply clone this repo and start mo
 3. `launch-template.yml.j2`: Jinja2 template for generating function configurations.
 4. `update-launch-list.py`: Script to update the `launch-list.yml` with new image tags. We use this to signal a new version of the container image to be deployed.
 5. GitHub Action workflows:
-
-- `push-to-ngc.yaml`: Builds and pushes your container image to NGC
-- `deploy.yaml`: Handles the deployment of functions.
+   - `push-to-ngc.yaml`: Builds and pushes your container image to NGC
+   - `deploy.yaml`: Handles the deployment of functions.
 
 ## Workflow Pipeline
 
@@ -106,3 +108,4 @@ graph TD
     G[GitHub Actions deploy.yml] -->|Triggers| D
     H[User Input function_name] -->|Specifies function to deploy| G
 ```
+

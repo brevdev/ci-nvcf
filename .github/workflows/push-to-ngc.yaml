@@ -1,3 +1,5 @@
+# Uncomment the push section if you want to trigger the workflow on a push to main
+
 name: NGC Build & Push
 on:
   # push:
