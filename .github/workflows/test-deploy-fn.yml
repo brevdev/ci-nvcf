@@ -1,0 +1,36 @@
+# This workflow is intended for repository testing purposes only.
+# It deploys functions to NVCF based on manual tag updates
+
+name: Deploy Function
+
+on:
+  workflow_dispatch:
+    inputs:
+      function_name:
+        description: "Function name to deploy"
+        required: true
+  workflow_run:
+    workflows: [Mock NGC Push and Update]
+    types:
+      - completed
+  # push:
+  #   paths:
+  #     - 'launch-list.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/liveaverage/ci-builder:latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy function
+        run: |
+          python3 launch-nvcf.py --manifest templates/launch-template.yml.j2 --environment production --function-name "${{ github.event.inputs.function_name || '*' }}"
+        env:
+          PRD_NVCF_API_KEY: ${{ secrets.PRD_NVCF_API_KEY }}
+          FN_NGC_ORG: ${{ secrets.FN_NGC_ORG }}
+          FN_NGC_TEAM: ${{ secrets.FN_NGC_TEAM }}
+          FN_HUGGING_FACE_HUB_TOKEN: ${{ secrets.FN_HUGGING_FACE_HUB_TOKEN }}

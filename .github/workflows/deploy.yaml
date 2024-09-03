@@ -1,18 +1,13 @@
+# This workflow is intended for repository testing purposes only.
+# It deploys functions to NVCF based on manual tag updates
+
 name: Deploy Function
 
 on:
-  workflow_dispatch:
-    inputs:
-      function_name:
-        description: 'Function name to deploy'
-        required: true
   workflow_run:
-    workflows: [Mock NGC Push and Update]
+    workflows: [NGC Build & Push]
     types:
       - completed
-  # push:
-  #   paths:
-  #     - 'launch-list.yml'
 
 jobs:
   deploy:

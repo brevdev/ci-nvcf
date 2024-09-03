@@ -1,10 +1,14 @@
+# This workflow is intended for repository testing purposes only.
+# It simulates the NGC push process and updates the launch-list.yml file
+# without actually pushing to NGC.
+
 name: Mock NGC Push and Update
 
 on:
   workflow_dispatch:
     inputs:
       new_tag:
-        description: 'New tag for the image'
+        description: "New tag for the image"
         required: true
 
 jobs:
@@ -20,9 +24,9 @@ jobs:
       - name: Mock NGC Push
         run: |
           echo "Mocking push to NGC with tag: ${{ github.event.inputs.new_tag }}"
-          echo "nvcr.io/your_org/your_image:${{ github.event.inputs.new_tag }}" > latest_image.txt
+          echo "nvcr.io/${{ secrets.FN_NGC_ORG }}/<image-name>:${{ github.event.inputs.new_tag }}" > latest_image.txt
 
-      - name: Update launch-list.yml with new image tag 
+      - name: Update launch-list.yml with new image tag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

@@ -1,0 +1,60 @@
+name: NGC Build & Push
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+    inputs:
+      new_tag:
+        description: "New tag for the image"
+        required: true
+jobs:
+  dockerhub:
+    name: Build and Push to NGC
+    runs-on: ubuntu-latest
+    # Remove the if:false to ensure the workflow runs
+    if: false
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Log in to NGC
+        uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446
+        with:
+          registry: nvcr.io
+          username: ${{ secrets.NVCR_USERNAME }}
+          password: ${{ secrets.NVCR_PASSWORD }}
+      - name: Set short git commit SHA
+        id: vars
+        run: |
+          sha=$(git rev-parse --short ${{ github.sha }})
+          echo "SHA=$sha" >> $GITHUB_ENV
+      - name: SHA
+        run: echo ${{ env.SHA }}
+      - name: Build and Push NGC Image
+        # Replace the <image-name> placeholder with your image name
+        run: |
+          docker build -t <image-name>:latest .
+          docker tag <image-name>:latest nvcr.io/${{ secrets.FN_NGC_ORG }}/<image-name>:latest
+          docker tag <image-name>:latest nvcr.io/${{ secrets.FN_NGC_ORG }}/<image-name>:${{ env.SHA }}
+          docker push nvcr.io/${{ secrets.FN_NGC_ORG }}/<image-name>:latest
+          docker push nvcr.io/${{ secrets.FN_NGC_ORG }}/<image-name>:${{ env.SHA }}
+
+  commit-and-push:
+    needs: dockerhub
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Update launch-list.yml with new image tag
+        run: |
+          python update-launch-list.py ${{ github.event.inputs.new_tag || env.SHA }}
+      - name: Commit and push if changed
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add launch-list.yml
+          git diff --quiet && git diff --staged --quiet || (git commit -m "tag: updated image tag to ${{ github.event.inputs.new_tag || env.SHA }}" && git push)
